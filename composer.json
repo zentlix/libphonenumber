@@ -15,7 +15,8 @@
         "giggsey/libphonenumber-for-php": "^8.13",
         "spiral/boot": "^3.5",
         "spiral/config": "^3.5",
-        "spiral/core": "^3.5"
+        "spiral/core": "^3.5",
+        "spiral/attributes": "^2.14 || ^3.0"
     },
     "require-dev": {
         "roave/security-advisories": "dev-latest",
@@ -24,9 +25,9 @@
         "spiral/testing": "^2.2.0",
         "vimeo/psalm": "^4.30",
         "spiral/twig-bridge": "^2.0",
-        "twig/twig": "^3.3.3",
         "spiral-packages/symfony-serializer": "^1.0",
         "spiral-packages/symfony-validator": "^1.2",
+        "spiral/nyholm-bridge": "^1.3",
         "symfony/yaml": "^6.0"
     },
     "autoload": {
@@ -36,6 +37,7 @@
     },
     "autoload-dev": {
         "psr-4": {
+            "Spiral\\PhoneNumber\\Tests\\App\\": "tests/app",
             "Spiral\\PhoneNumber\\Tests\\": "tests/src"
         }
     },
@@ -55,6 +57,9 @@
         "allow-plugins": {
             "spiral/composer-publish-plugin": true
         }
+    },
+    "conflict": {
+        "spiral/framework": "<3.5"
     },
     "minimum-stability": "dev",
     "prefer-stable": true

@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Spiral\PhoneNumber\Validator\Constraints;
 
+use Spiral\Attributes\NamedArgumentConstructor;
 use Spiral\PhoneNumber\Exception\InvalidArgumentException;
 use Symfony\Component\Validator\Constraint;
 
 /**
  * @psalm-suppress PropertyNotSetInConstructor
  */
-#[\Attribute(\Attribute::TARGET_PROPERTY)]
+#[\Attribute(\Attribute::TARGET_PROPERTY), NamedArgumentConstructor]
 final class PhoneNumber extends Constraint
 {
     public const ANY = 'any';
