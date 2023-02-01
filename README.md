@@ -123,6 +123,8 @@ $utils->format($phoneNumber, PhoneNumberFormat::RFC3966); // tel:+1-650-253-0000
 
 ## Validation
 
+### Symfony Validator
+
 The package provides a `Spiral\PhoneNumber\Validator\Constraints\PhoneNumber` constraint that can be used to validate
 phone numbers using the `spiral-packages/symfony-validator` component.
 
@@ -164,6 +166,48 @@ class User
     protected ?PhoneNumber $phone = null;
 }
 ```
+
+### Spiral Validator
+
+The package provides a `Spiral\PhoneNumber\Validator\Checker\PhoneNumberChecker` checker that can be used to validate
+phone numbers using the `spiral/validator` component.
+
+To use the `Spiral\PhoneNumber\Validator\Checker\PhoneNumberChecker` checker, you will first need to make sure that
+the `spiral/validator` package is installed and enabled in your Spiral Framework application.
+
+Once the `spiral/validator` package is installed and enabled, you can use the `PhoneNumberChecker`
+checker in your code like this:
+
+```php
+namespace App\Request;
+
+use Spiral\Filters\Attribute\Input\Post;
+use Spiral\Filters\Model\Filter;
+use Spiral\Filters\Model\FilterDefinitionInterface;
+use Spiral\Filters\Model\HasFilterDefinition;
+use Spiral\Validator\FilterDefinition;
+
+final class UserRequest extends Filter implements HasFilterDefinition
+{
+    #[Post]
+    public string $phone;
+
+    public function filterDefinition(): FilterDefinitionInterface
+    {
+        return new FilterDefinition([
+            'phone' => ['phone'],
+            // or with custom error message
+            'phone' => [
+                ['phone', 'error' => 'Custom error message.']
+            ]
+        ]);
+    }
+}
+```
+
+In this example, the `PhoneNumberChecker` checker is applied to the **$phone** property of the **UserRequest** class.
+This will cause the Validator to validate the **$phone** property as a phone number when the UserRequest object
+is validated. If the value of the $phone property is not a valid phone number, the validation will fail.
 
 ## Serialization
 
