@@ -17,6 +17,7 @@ use Spiral\PhoneNumber\Twig\Extension\PhoneNumberExtension;
 use Spiral\Serializer\Symfony\NormalizersRegistryInterface;
 use Spiral\Twig\Config\TwigConfig;
 use Spiral\Twig\Extension\ContainerExtension;
+use Spiral\Validator\Config\ValidatorConfig;
 
 final class PhoneNumberBootloaderTest extends TestCase
 {
@@ -52,6 +53,24 @@ final class PhoneNumberBootloaderTest extends TestCase
         $registry = $container->get(NormalizersRegistryInterface::class);
 
         $this->assertTrue($registry->has(PhoneNumberNormalizer::class));
+    }
+
+    public function testValidatorCheckerShouldBeRegistered(): void
+    {
+        $container = $this->getApp()->getContainer();
+        /** @var ValidatorConfig $config */
+        $config = $container->get(ValidatorConfig::class);
+
+        $this->assertTrue($config->hasChecker('phone'));
+    }
+
+    public function testValidatorAliasShouldBeRegistered(): void
+    {
+        $container = $this->getApp()->getContainer();
+        /** @var ValidatorConfig $config */
+        $config = $container->get(ValidatorConfig::class);
+
+        $this->assertSame('phone:isValid', $config->resolveAlias('phone'));
     }
 
     public function testTwigExtensionShouldBeRegistered(): void

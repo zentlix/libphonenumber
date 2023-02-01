@@ -10,6 +10,7 @@ use libphonenumber\PhoneNumberToCarrierMapper;
 use libphonenumber\PhoneNumberToTimeZonesMapper;
 use libphonenumber\PhoneNumberUtil;
 use libphonenumber\ShortNumberInfo;
+use Spiral\Boot\AbstractKernel;
 use Spiral\Boot\Bootloader\Bootloader;
 use Spiral\Config\ConfiguratorInterface;
 use Spiral\Core\Container;
@@ -17,9 +18,11 @@ use Spiral\Core\FactoryInterface as ContainerFactory;
 use Spiral\PhoneNumber\Config\PhoneNumberConfig;
 use Spiral\PhoneNumber\Serializer\Normalizer\PhoneNumberNormalizer;
 use Spiral\PhoneNumber\Twig\Extension\PhoneNumberExtension;
+use Spiral\PhoneNumber\Validator\Checker\PhoneNumberChecker;
 use Spiral\Serializer\Symfony\NormalizersRegistry;
 use Spiral\Serializer\Symfony\NormalizersRegistryInterface;
 use Spiral\Twig\Bootloader\TwigBootloader;
+use Spiral\Validator\Bootloader\ValidatorBootloader;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 final class PhoneNumberBootloader extends Bootloader
@@ -42,10 +45,16 @@ final class PhoneNumberBootloader extends Bootloader
         $this->initConfig();
     }
 
-    public function boot(PhoneNumberConfig $config, Container $container, ContainerFactory $factory): void
-    {
+    public function boot(
+        PhoneNumberConfig $config,
+        Container $container,
+        ContainerFactory $factory,
+        AbstractKernel $kernel
+    ): void {
         $this->registerNormalizer($config, $container, $factory);
         $this->registerTwigExtension($container);
+
+        $kernel->booted(fn () => $this->registerValidator($container));
     }
 
     private function initConfig(): void
@@ -128,5 +137,16 @@ final class PhoneNumberBootloader extends Bootloader
 
         $twig = $container->get(TwigBootloader::class);
         $twig->addExtension(PhoneNumberExtension::class);
+    }
+
+    private function registerValidator(Container $container): void
+    {
+        if (!class_exists(ValidatorBootloader::class)) {
+            return;
+        }
+
+        $validator = $container->get(ValidatorBootloader::class);
+        $validator->addChecker('phone', PhoneNumberChecker::class);
+        $validator->addAlias('phone', 'phone::isValid');
     }
 }

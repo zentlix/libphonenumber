@@ -11,7 +11,8 @@ use Spiral\PhoneNumber\Bootloader\PhoneNumberBootloader;
 use Spiral\Serializer\Symfony\Bootloader\SerializerBootloader;
 use Spiral\Twig\Bootloader\TwigBootloader;
 use Spiral\Validation\Bootloader\ValidationBootloader;
-use Spiral\Validation\Symfony\Bootloader\ValidatorBootloader;
+use Spiral\Validation\Symfony\Bootloader\ValidatorBootloader as SymfonyValidator;
+use Spiral\Validator\Bootloader\ValidatorBootloader as SpiralValidator;
 
 abstract class TestCase extends \Spiral\Testing\TestCase
 {
@@ -30,7 +31,8 @@ abstract class TestCase extends \Spiral\Testing\TestCase
             NyholmBootloader::class,
             FiltersBootloader::class,
             ValidationBootloader::class,
-            ValidatorBootloader::class,
+            SymfonyValidator::class,
+            SpiralValidator::class,
         ];
     }
 }
