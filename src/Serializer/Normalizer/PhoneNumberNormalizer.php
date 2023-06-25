@@ -58,4 +58,11 @@ class PhoneNumberNormalizer implements NormalizerInterface, DenormalizerInterfac
     {
         return PhoneNumber::class === $type && \is_string($data);
     }
+
+    public function getSupportedTypes(?string $format): array
+    {
+        return [
+            PhoneNumber::class => true,
+        ];
+    }
 }

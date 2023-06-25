@@ -19,11 +19,9 @@ use Spiral\PhoneNumber\Config\PhoneNumberConfig;
 use Spiral\PhoneNumber\Serializer\Normalizer\PhoneNumberNormalizer;
 use Spiral\PhoneNumber\Twig\Extension\PhoneNumberExtension;
 use Spiral\PhoneNumber\Validator\Checker\PhoneNumberChecker;
-use Spiral\Serializer\Symfony\NormalizersRegistry;
 use Spiral\Serializer\Symfony\NormalizersRegistryInterface;
 use Spiral\Twig\Bootloader\TwigBootloader;
 use Spiral\Validator\Bootloader\ValidatorBootloader;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 final class PhoneNumberBootloader extends Bootloader
 {
@@ -105,28 +103,10 @@ final class PhoneNumberBootloader extends Bootloader
         /** @var NormalizersRegistryInterface $registry */
         $registry = $container->get(NormalizersRegistryInterface::class);
 
-        $normalizers = $registry->all();
-        $objectNormalizer = null;
-        foreach ($normalizers as $key => $normalizer) {
-            if (ObjectNormalizer::class === $normalizer::class) {
-                $objectNormalizer = $normalizer;
-                unset($normalizers[$key]);
-                break;
-            }
-        }
-        $registry = new NormalizersRegistry();
-        foreach ($normalizers as $normalizer) {
-            $registry->register($normalizer);
-        }
         $registry->register($factory->make(PhoneNumberNormalizer::class, [
             'region' => $config->getDefaultRegion(),
             'format' => $config->getDefaultFormat(),
-        ]));
-        if (null !== $objectNormalizer) {
-            $registry->register($objectNormalizer);
-        }
-
-        $container->bindSingleton(NormalizersRegistryInterface::class, $registry);
+        ]), 670);
     }
 
     private function registerTwigExtension(Container $container): void

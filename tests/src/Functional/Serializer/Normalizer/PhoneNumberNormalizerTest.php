@@ -20,7 +20,7 @@ final class PhoneNumberNormalizerTest extends TestCase
 
         $this->assertSame(
             json_encode('+16502530000', JSON_THROW_ON_ERROR),
-            $manager->getSerializer('json')->serialize($utils->parse('+1 650 253 0000', 'US'))
+            $manager->getSerializer('symfony-json')->serialize($utils->parse('+1 650 253 0000', 'US'))
         );
     }
 
@@ -33,7 +33,7 @@ final class PhoneNumberNormalizerTest extends TestCase
 
         $this->assertEquals(
             $utils->parse('+1 650 253 0000', 'US'),
-            $manager->getSerializer('json')->unserialize(json_encode('+16502530000'), PhoneNumber::class)
+            $manager->getSerializer('symfony-json')->unserialize(json_encode('+16502530000'), PhoneNumber::class)
         );
     }
 }
