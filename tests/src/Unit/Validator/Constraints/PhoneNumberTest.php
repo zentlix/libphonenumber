@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Spiral\PhoneNumber\Tests\Unit\Validator\Constraints;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Spiral\PhoneNumber\Exception\InvalidArgumentException;
 use Spiral\PhoneNumber\Validator\Constraints\PhoneNumber;
@@ -19,9 +20,7 @@ final class PhoneNumberTest extends TestCase
         $this->assertSame([PhoneNumber::MOBILE, PhoneNumber::FIXED_LINE], $constraint->getTypes());
     }
 
-    /**
-     * @dataProvider typeMessagesDataProvider
-     */
+    #[DataProvider('typeMessagesDataProvider')]
     public function testGetMessage(string|array $type, string $expected): void
     {
         $constraint = new PhoneNumber(type: $type);
@@ -34,9 +33,7 @@ final class PhoneNumberTest extends TestCase
         $this->assertSame('foo', $constraint->getMessage());
     }
 
-    /**
-     * @dataProvider typeNamesDataProvider
-     */
+    #[DataProvider('typeNamesDataProvider')]
     public function testGetTypeNames(string|array $type, array $expected): void
     {
         $constraint = new PhoneNumber(type: $type);
@@ -51,7 +48,7 @@ final class PhoneNumberTest extends TestCase
         $constraint->getTypeNames();
     }
 
-    public function typeMessagesDataProvider(): \Traversable
+    public static function typeMessagesDataProvider(): \Traversable
     {
         yield [PhoneNumber::ANY, 'This value is not a valid phone number.'];
         yield [PhoneNumber::FIXED_LINE, 'This value is not a valid fixed-line number.'];
@@ -67,7 +64,7 @@ final class PhoneNumberTest extends TestCase
         yield [[PhoneNumber::MOBILE, PhoneNumber::FIXED_LINE], 'This value is not a valid phone number.'];
     }
 
-    public function typeNamesDataProvider(): \Traversable
+    public static function typeNamesDataProvider(): \Traversable
     {
         yield [PhoneNumber::ANY, ['phone number']];
         yield [PhoneNumber::FIXED_LINE, ['fixed-line number']];

@@ -6,14 +6,13 @@ namespace Spiral\PhoneNumber\Tests\Unit\Serializer\Normalizer;
 
 use libphonenumber\PhoneNumber;
 use libphonenumber\PhoneNumberUtil;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Spiral\PhoneNumber\Serializer\Normalizer\PhoneNumberNormalizer;
 
 final class PhoneNumberNormalizerTest extends TestCase
 {
-    /**
-     * @dataProvider supportsNormalizationDataProvider
-     */
+    #[DataProvider('supportsNormalizationDataProvider')]
     public function testSupportsNormalization(mixed $data, bool $expected): void
     {
         $normalizer = new PhoneNumberNormalizer(PhoneNumberUtil::getInstance());
@@ -21,9 +20,7 @@ final class PhoneNumberNormalizerTest extends TestCase
         $this->assertSame($expected, $normalizer->supportsNormalization($data));
     }
 
-    /**
-     * @dataProvider supportsDenormalizationDataProvider
-     */
+    #[DataProvider('supportsDenormalizationDataProvider')]
     public function testSupportsDenormalization(mixed $data, string $type, bool $expected): void
     {
         $normalizer = new PhoneNumberNormalizer(PhoneNumberUtil::getInstance());
@@ -31,7 +28,7 @@ final class PhoneNumberNormalizerTest extends TestCase
         $this->assertSame($expected, $normalizer->supportsDenormalization($data, $type));
     }
 
-    public function supportsNormalizationDataProvider(): \Traversable
+    public static function supportsNormalizationDataProvider(): \Traversable
     {
         yield [new PhoneNumber(), true];
         yield [new \stdClass(), false];
@@ -41,7 +38,7 @@ final class PhoneNumberNormalizerTest extends TestCase
         yield ['foo', false];
     }
 
-    public function supportsDenormalizationDataProvider(): \Traversable
+    public static function supportsDenormalizationDataProvider(): \Traversable
     {
         yield ['string', PhoneNumber::class, true];
         yield ['string', \stdClass::class, false];
