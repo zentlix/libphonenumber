@@ -136,7 +136,10 @@ final class PhoneNumberValidator extends ConstraintValidator
                         'Invalid property path `%s` provided to `%s` constraint: ',
                         $path,
                         get_debug_type($constraint)
-                    ).$e->getMessage(), 0, $e);
+                    ).$e->getMessage(),
+                    0,
+                    $e
+                );
             }
         }
 

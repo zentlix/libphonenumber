@@ -47,6 +47,7 @@ final class PhoneNumberToArrayTransformer implements DataTransformerInterface
     }
 
     /**
+     * @param mixed $value
      * @psalm-assert array{country: string, number: string} $value
      */
     public function reverseTransform(mixed $value): ?PhoneNumber
